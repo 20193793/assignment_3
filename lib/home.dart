@@ -15,8 +15,8 @@ class _HomePageState extends State<HomePage> {
   double adults = 1;
   double children = 0;
 
-  List<String> extras = ["breakfast", "wifi", "parking"];
   List<String> views = ["garden", "sea"];
+  List<String> extras = ["breakfast", "wifi", "parking"];
 
   CustomGroupController extrasController =
       CustomGroupController(isMultipleSelection: true);
@@ -225,7 +225,8 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Reservations()));
+                                  builder: (context) => Reservations(
+                                      adults: adults, children: children)));
                         },
                         style: ButtonStyle(
                             backgroundColor:

@@ -9,7 +9,7 @@ Future main() async {
   runApp(MaterialApp(
     routes: {
       "/": (context) => home.HomePage(),
-      "/reservation": (context) => const reservation.Reservations()
+      /* "/reservation": (context) => const reservation.Reservations() */
     },
     initialRoute: "/",
   ));

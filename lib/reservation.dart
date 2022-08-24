@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -18,17 +19,18 @@ class MyItem {
 }
 
 class Reservations extends StatefulWidget {
-  /* final double adults;
-  final double children; */
-  const Reservations({Key? key}) : super(key: key);
+  final double adults;
+  final double children;
+  const Reservations({Key? key, required this.adults, required this.children})
+      : super(key: key);
 
   @override
   State<Reservations> createState() => _ReservationsState();
 }
 
-bool isSelected = false;
-
 class _ReservationsState extends State<Reservations> {
+  bool isSelected = false;
+
   final List<MyItem> _itmes = <MyItem>[
     MyItem(
         image: const AssetImage("images/resort-hero.jpg"),
@@ -118,16 +120,27 @@ class _ReservationsState extends State<Reservations> {
                     }).toList(),
                   ),
                   TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        reserve(adults: widget.adults);
+                      },
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
                               const Color(0xff008D9F))),
                       child: const Text(
                         "Book Now",
                         style: TextStyle(color: Colors.white),
-                      ))
+                      )),
                 ],
               ),
             ))));
+  }
+
+  Future reserve({required double adults}) async {
+    final docReservation =
+        FirebaseFirestore.instance.collection("reservations").doc("id");
+
+    final json = {"adults": adults};
+
+    await docReservation.set(json);
   }
 }
