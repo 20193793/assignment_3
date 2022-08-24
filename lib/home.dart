@@ -18,8 +18,19 @@ class _HomePageState extends State<HomePage> {
   List<String> views = ["garden", "sea"];
   List<String> extras = ["breakfast", "wifi", "parking"];
 
+  String viewRet = "";
+  List<String> extrasRet = [];
+
   CustomGroupController extrasController =
       CustomGroupController(isMultipleSelection: true);
+
+  List<String> extrasControllerFunc() {
+    extrasController.listen((v) {
+      extrasRet = v;
+      print(extrasRet);
+    });
+    return extrasRet;
+  }
 
   String extrasTitle(int index) {
     String title = "";
@@ -50,6 +61,36 @@ class _HomePageState extends State<HomePage> {
       default:
     }
     return title;
+  }
+
+  DateTime inDate = DateTime.now();
+  Future<Null> selectInDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: inDate,
+      firstDate: DateTime(1960),
+      lastDate: DateTime(2030),
+    );
+    if (picked != null && picked != inDate) {
+      setState(() {
+        inDate = picked;
+      });
+    }
+  }
+
+  DateTime outDate = DateTime.now();
+  Future<Null> selectOutDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: outDate,
+      firstDate: DateTime(1960),
+      lastDate: DateTime(2030),
+    );
+    if (picked != null && picked != outDate) {
+      setState(() {
+        outDate = picked;
+      });
+    }
   }
 
   @override
@@ -84,10 +125,12 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(width: 10),
                         IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              selectInDate(context);
+                            },
                             icon: const Icon(Icons.calendar_month_outlined)),
-                        const Text(
-                          "2022-2-1",
+                        Text(
+                          "${inDate.day} - ${inDate.month} - ${inDate.year}",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Color(0xff008D9F)),
@@ -105,10 +148,12 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(width: 10),
                         IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              selectOutDate(context);
+                            },
                             icon: const Icon(Icons.calendar_month_outlined)),
-                        const Text(
-                          "2022-2-1",
+                        Text(
+                          "${outDate.day} - ${outDate.month} - ${outDate.year}",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Color(0xff008D9F)),
@@ -137,7 +182,7 @@ class _HomePageState extends State<HomePage> {
                               label: adults.round().toString(),
                               min: 1.0,
                               max: 5.0,
-                              divisions: 5,
+                              divisions: 4,
                             )),
                         Text(
                           adults.round().toString(),
@@ -194,7 +239,7 @@ class _HomePageState extends State<HomePage> {
                       controller: extrasController,
                       itemBuilder: (context, index, checked, isDisabled) {
                         return Row(children: <Widget>[
-                          Checkbox(value: checked, onChanged: (ara) {}),
+                          Checkbox(value: checked, onChanged: (isDisabled) {}),
                           Text(extrasTitle(index))
                         ]);
                       },
@@ -226,7 +271,12 @@ class _HomePageState extends State<HomePage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => Reservations(
-                                      adults: adults, children: children)));
+                                      inDate: inDate,
+                                      outDate: outDate,
+                                      adults: adults,
+                                      children: children,
+                                      extras: [],
+                                      views: [])));
                         },
                         style: ButtonStyle(
                             backgroundColor:

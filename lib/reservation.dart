@@ -19,10 +19,21 @@ class MyItem {
 }
 
 class Reservations extends StatefulWidget {
+  final DateTime inDate;
+  final DateTime outDate;
   final double adults;
   final double children;
-  const Reservations({Key? key, required this.adults, required this.children})
-      : super(key: key);
+  final List<String> extras;
+  final List<String> views;
+  const Reservations({
+    Key? key,
+    required this.adults,
+    required this.children,
+    required this.inDate,
+    required this.outDate,
+    required this.extras,
+    required this.views,
+  }) : super(key: key);
 
   @override
   State<Reservations> createState() => _ReservationsState();
@@ -121,7 +132,13 @@ class _ReservationsState extends State<Reservations> {
                   ),
                   TextButton(
                       onPressed: () {
-                        reserve(adults: widget.adults);
+                        reserve(
+                            inDate: widget.inDate,
+                            outDate: widget.outDate,
+                            children: widget.children,
+                            adults: widget.adults,
+                            extras: widget.extras,
+                            view: widget.views);
                       },
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
@@ -135,11 +152,24 @@ class _ReservationsState extends State<Reservations> {
             ))));
   }
 
-  Future reserve({required double adults}) async {
+  Future reserve(
+      {required DateTime inDate,
+      required DateTime outDate,
+      required double children,
+      required double adults,
+      required List<String> extras,
+      required List<String> view}) async {
     final docReservation =
-        FirebaseFirestore.instance.collection("reservations").doc("id");
+        FirebaseFirestore.instance.collection("reservations").doc();
 
-    final json = {"adults": adults};
+    final json = {
+      "check-in": inDate,
+      "check-out": outDate,
+      "children": children,
+      "adults": adults,
+      "extras": extras,
+      "view": view
+    };
 
     await docReservation.set(json);
   }
