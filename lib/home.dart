@@ -19,17 +19,25 @@ class _HomePageState extends State<HomePage> {
   List<String> extras = ["breakfast", "wifi", "parking"];
 
   String viewRet = "";
-  List<String> extrasRet = [];
+  String extrasRet = "";
 
   CustomGroupController extrasController =
       CustomGroupController(isMultipleSelection: true);
 
-  List<String> extrasControllerFunc() {
+  void extrasControllerFunc() {
     extrasController.listen((v) {
-      extrasRet = v;
+      extrasRet = v.toString();
       print(extrasRet);
     });
-    return extrasRet;
+  }
+
+  CustomGroupController viewController = CustomGroupController();
+
+  void viewControllerFunc() {
+    viewController.listen((v) {
+      viewRet = v.toString();
+      print(viewRet);
+    });
   }
 
   String extrasTitle(int index) {
@@ -95,6 +103,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    extrasControllerFunc();
+    viewControllerFunc();
     return MaterialApp(
         title: "Homepage",
         home: Scaffold(
@@ -256,7 +266,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                     CustomGroupedCheckbox<String>(
-                      controller: extrasController,
+                      controller: viewController,
                       itemBuilder: (context, index, checked, isDisabled) {
                         return Row(children: <Widget>[
                           Checkbox(value: checked, onChanged: (ara) {}),
@@ -275,8 +285,8 @@ class _HomePageState extends State<HomePage> {
                                       outDate: outDate,
                                       adults: adults,
                                       children: children,
-                                      extras: [],
-                                      views: [])));
+                                      extras: extrasRet,
+                                      views: viewRet)));
                         },
                         style: ButtonStyle(
                             backgroundColor:

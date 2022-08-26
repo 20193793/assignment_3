@@ -23,8 +23,8 @@ class Reservations extends StatefulWidget {
   final DateTime outDate;
   final double adults;
   final double children;
-  final List<String> extras;
-  final List<String> views;
+  final String extras;
+  final String views;
   const Reservations({
     Key? key,
     required this.adults,
@@ -157,8 +157,8 @@ class _ReservationsState extends State<Reservations> {
       required DateTime outDate,
       required double children,
       required double adults,
-      required List<String> extras,
-      required List<String> view}) async {
+      required String extras,
+      required String view}) async {
     final docReservation =
         FirebaseFirestore.instance.collection("reservations").doc();
 
