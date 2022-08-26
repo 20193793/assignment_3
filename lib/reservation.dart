@@ -41,6 +41,7 @@ class Reservations extends StatefulWidget {
 
 class _ReservationsState extends State<Reservations> {
   bool isSelected = false;
+  String room = "";
 
   final List<MyItem> _itmes = <MyItem>[
     MyItem(
@@ -103,7 +104,14 @@ class _ReservationsState extends State<Reservations> {
                             ),
                             leading: Image(image: item.image),
                             trailing: Switch(
-                                value: isSelected, onChanged: (isSelected) {}),
+                                value: isSelected,
+                                onChanged: (bool selected) {
+                                  setState(() {
+                                    room = item.header;
+                                    isSelected = selected;
+                                    print(room);
+                                  });
+                                }),
                           );
                         },
                         body: ListTile(
